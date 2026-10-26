@@ -1,0 +1,23 @@
+os: linux
+dist: jammy
+language: python
+python:
+  - "3.12"
+install:
+  - pip install -r requirements-dev.txt
+script:
+  - black --check .
+  - flake8
+  - coverage run manage.py test
+after_success:
+  - coveralls
+deploy:
+  provider: elasticbeanstalk
+  edge: true
+  region: us-east-2
+  app: swe1-app
+  env: Swe1-app-env
+  bucket: elasticbeanstalk-us-east-2-873072308356
+  wait_until_deployed: true
+  on:
+    branch: main
